@@ -112,13 +112,17 @@ class ModFinder
     private function getRating(Crawler $crawler)
     {
         $img = basename($crawler->filter('.fileRatingDetails img')->attr('src'));
-        if (is_nan($img[0])) {
-            ldd($img);
+        if (strpos($img, 'n') === 0) {
+            $stars = 0;
+            $ratings = 0;
+        } else {
+            $stars = (int) $img[0];
+            $ratings = (int) str_replace(' ratings', '', $crawler->filter('.numRatings')->text());
         }
 
         return [
-            'stars' => (int) $img[0],
-            'ratings' => (int) str_replace(' ratings', '', $crawler->filter('.numRatings')->text())
+            'stars' => $stars,
+            'ratings' => $ratings
         ];
     }
 
