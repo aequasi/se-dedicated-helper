@@ -1,0 +1,76 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <form method="get">
+        <div class="form-group">
+            <label for="userId">
+                Enter your user id below, and this will generate a list of mods you have marked as a favorite(not subscribed)
+            </label>
+            <input type="text" name="userId" class="form-control" value="{{ app.request.query.get('userId') }}"/>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+
+        <hr style="margin-top: 20px;"/>
+
+        <h2>Mods Enabled</h2>
+
+        {% for mod in mods %}
+            <div class="col-sm-6 mod" style="cursor: pointer;">
+                <div class="well" style="height: 150px;">
+                    <div class="col-sm-3">
+                        <img class="img-responsive" src="{{ mod.image }}" />
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="id"><em>{{ mod.id }}</em></div>
+                        <div class="title"><strong>{{ mod.title }}</strong></div>
+                        <div class="rating">{{ mod.rating.stars }} Stars</div>
+                        <div class="posted">Posted: {{ mod.posted }}</div>
+                        <div class="updated">Updated: {{ mod.updated }}</div>
+                    </div>
+                    <div class="clear clearfix"></div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="col-xs-12">
+            <hr style="margin-top: 20px;"/>
+        </div>
+
+        <div class="col-xs-12">
+            <label>Generated XML for your mods</label>
+            <textarea rows="20" class="form-control"></textarea>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        var mods = {{ mods|json_encode|raw }};
+        function renderMods() {
+            var textarea = $('textarea');
+            textarea.val("<Mods>\n");
+            console.log(mods);
+            $.each(mods, function(index, mod) {
+                if (!mod.enabled) {
+                    return;
+                }
+
+                var val = textarea.val();
+                val += "\t<ModItem><Name>"+mod.id+'.sbm</Name><PublishedFileId>'+mod.id+"</PublishedFileId></ModItem>\n";
+
+                textarea.val(val);
+            });
+
+            textarea.val(textarea.val()+"</Mods>");
+        }
+
+        $(function() {
+            renderMods();
+            $('.mod').on('click', function() {
+                $(this).toggleClass('disabled');
+                var id = $(this).find('.id').text();
+                mods[id].enabled = !mods[id].enabled;
+                renderMods();
+            })
+        });
+    </script>
+
+{% endblock %}

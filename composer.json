@@ -1,0 +1,21 @@
+{
+    "name":              "aequasi/mod-helper",
+    "description":       "Mod Helper for Space Engineers Dedicated Servers",
+    "minimum-stability": "stable",
+    "license":           "proprietary",
+    "authors":           [
+        {
+            "name":  "Aaron Scherer",
+            "email": "aequasi@gmail.com"
+        }
+    ],
+    "require": {
+        "silex/silex": "@stable",
+        "twig/twig": "@stable",
+        "raulfraile/ladybug": "dev-master",
+        "symfony/yaml": "~2.6",
+        "symfony/dom-crawler": "~2.6",
+        "symfony/css-selector": "~2.6",
+        "fabpot/goutte": "~2.0"
+    }
+}
