@@ -78,7 +78,7 @@ class ModFinder
     private function buildMod(Crawler $node, $index)
     {
         $id = (int) str_replace('sharedfile_', '', $node->attr('id'));
-        if ($this->cache->has($id, 60*60*8)) {
+        if ($this->cache->has($id, 60*60*24*31)) {
             return $this->cache->get($id);
         }
 
